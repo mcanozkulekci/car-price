@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Patch,
+  Query,
+} from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UsersService } from './users.service';
 @Controller('auth')
@@ -10,7 +18,13 @@ export class UsersController {
   }
 
   @Get('/:id')
-  findUser(@Param() param: number) {
-    this.usersService.findOne(param);
+  findUser(@Param('id') id: string) {
+    //Eventough we store the id as a number in the db, we should define it as a string inthe parameter section
+    return this.usersService.findOne(parseInt(id));
+  }
+
+  @Get()
+  findAllUsers(@Query('email') email: string) {
+    return this.usersService.find(email);
   }
 }
